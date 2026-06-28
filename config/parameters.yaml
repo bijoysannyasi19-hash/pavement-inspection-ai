@@ -1,0 +1,185 @@
+# Pavement Asset Management System Configuration
+
+# 1. Damage Classes Mapping
+classes:
+  0: "Pothole"
+  1: "Longitudinal Crack"
+  2: "Transverse Crack"
+  3: "Alligator Crack"
+  4: "Rutting"
+  5: "Manhole Damage"
+  6: "Road Marking Damage"
+
+# 2. Severity Thresholds
+# Based on the percentage of bounding box area relative to image area
+severity_thresholds:
+  low: 0.02       # < 2% of image area
+  medium: 0.05    # 2% - 5% of image area
+  high: 0.15      # 5% - 15% of image area
+  # critical is > 15%
+
+# 3. Cost Estimation (Unit Cost in USD per square meter)
+unit_costs:
+  "Crack Sealing": 5.00
+  "Surface Treatment": 15.00
+  "Patching": 35.00
+  "Full Depth Patching": 80.00
+  "Pavement Reconstruction": 150.00
+  "Marking Repainting": 10.00
+  "Manhole Repair": 300.00 # Fixed cost, not per sq meter
+  "Milling & Overlay": 100.00
+
+road_category_multipliers:
+  "Local": 1.0
+  "Collector": 1.2
+  "Arterial": 1.5
+  "Highway": 2.0
+
+# 4. Maintenance Recommendation Logic
+maintenance_logic:
+  "Pothole":
+    low: "Patching"
+    medium: "Patching"
+    high: "Full Depth Patching"
+    critical: "Pavement Reconstruction"
+  "Longitudinal Crack":
+    low: "Crack Sealing"
+    medium: "Crack Sealing"
+    high: "Surface Treatment"
+    critical: "Surface Treatment"
+  "Transverse Crack":
+    low: "Crack Sealing"
+    medium: "Crack Sealing"
+    high: "Surface Treatment"
+    critical: "Surface Treatment"
+  "Alligator Crack":
+    low: "Surface Treatment"
+    medium: "Surface Treatment"
+    high: "Full Depth Patching"
+    critical: "Pavement Reconstruction"
+  "Rutting":
+    low: "Surface Treatment"
+    medium: "Surface Treatment"
+    high: "Full Depth Patching"
+    critical: "Pavement Reconstruction"
+  "Manhole Damage":
+    low: "Manhole Repair"
+    medium: "Manhole Repair"
+    high: "Manhole Repair"
+    critical: "Manhole Repair"
+  "Road Marking Damage":
+    low: "Marking Repainting"
+    medium: "Marking Repainting"
+    high: "Marking Repainting"
+    critical: "Marking Repainting"
+
+# 5. Road Health Index (RHI) Weights
+# Deductions per instance of damage
+rhi_deductions:
+  "Pothole":
+    low: 2.0
+    medium: 5.0
+    high: 10.0
+    critical: 20.0
+  "Longitudinal Crack":
+    low: 1.0
+    medium: 2.0
+    high: 5.0
+    critical: 10.0
+  "Transverse Crack":
+    low: 1.0
+    medium: 2.0
+    high: 5.0
+    critical: 10.0
+  "Alligator Crack":
+    low: 3.0
+    medium: 6.0
+    high: 12.0
+    critical: 25.0
+  "Rutting":
+    low: 2.0
+    medium: 4.0
+    high: 8.0
+    critical: 15.0
+  "Manhole Damage":
+    low: 1.0
+    medium: 2.0
+    high: 4.0
+    critical: 8.0
+  "Road Marking Damage":
+    low: 0.5
+    medium: 1.0
+    high: 2.0
+    critical: 4.0
+
+# 6. Productivity Rates (sqm repaired per hour)
+productivity_rates:
+  "Crack Sealing": 10.0
+  "Surface Treatment": 25.0
+  "Patching": 5.0
+  "Full Depth Patching": 2.0
+  "Pavement Reconstruction": 1.0
+  "Marking Repainting": 20.0
+  "Manhole Repair": 1.0 # 1 manhole per hour
+  "Milling & Overlay": 15.0
+
+# 7. Priority Mapping (Based on Severity)
+priority_mapping:
+  "Critical": "Urgent (24h)"
+  "High": "High (7 Days)"
+  "Medium": "Medium (30 Days)"
+  "Low": "Low (Next Cycle)"
+
+# 8. Cost Breakdown Percentages (Labor, Materials, Equipment, Traffic Management)
+cost_breakdown:
+  "Crack Sealing": {"labor": 0.45, "materials": 0.30, "equipment": 0.15, "traffic": 0.10}
+  "Surface Treatment": {"labor": 0.25, "materials": 0.45, "equipment": 0.20, "traffic": 0.10}
+  "Patching": {"labor": 0.35, "materials": 0.40, "equipment": 0.15, "traffic": 0.10}
+  "Full Depth Patching": {"labor": 0.30, "materials": 0.40, "equipment": 0.15, "traffic": 0.15}
+  "Pavement Reconstruction": {"labor": 0.25, "materials": 0.35, "equipment": 0.25, "traffic": 0.15}
+  "Marking Repainting": {"labor": 0.55, "materials": 0.30, "equipment": 0.10, "traffic": 0.05}
+  "Manhole Repair": {"labor": 0.45, "materials": 0.40, "equipment": 0.10, "traffic": 0.05}
+  "Milling & Overlay": {"labor": 0.20, "materials": 0.45, "equipment": 0.25, "traffic": 0.10}
+
+# 9. Maintenance Details
+maintenance_details:
+  "Crack Sealing":
+    crew_size: "2-3 Workers"
+    equipment: "Hot Air Lance, Melter/Applicator, V-shaped Squeegee"
+    materials: "Hot-poured Rubberized Asphalt Sealant"
+    service_life: "2-5 Years"
+  "Surface Treatment":
+    crew_size: "4-6 Workers"
+    equipment: "Asphalt Distributor, Aggregate Spreader, Pneumatic Roller"
+    materials: "Bitumen Emulsion, Cover Aggregate"
+    service_life: "5-7 Years"
+  "Patching":
+    crew_size: "3-4 Workers"
+    equipment: "Pneumatic Jackhammer, Hand Tools, Compactor"
+    materials: "Cold/Hot Mix Asphalt, Tack Coat"
+    service_life: "1-3 Years"
+  "Full Depth Patching":
+    crew_size: "5-6 Workers"
+    equipment: "Concrete Saw, Excavator, Vibratory Roller"
+    materials: "Hot Mix Asphalt/Concrete, Subbase Material"
+    service_life: "5-10 Years"
+  "Pavement Reconstruction":
+    crew_size: "10+ Workers"
+    equipment: "Milling Machine, Paver, Heavy Rollers, Grader"
+    materials: "Subgrade, Base Course, Asphalt/Concrete"
+    service_life: "15-20 Years"
+  "Marking Repainting":
+    crew_size: "2 Workers"
+    equipment: "Line Striping Machine, Traffic Cones"
+    materials: "Thermoplastic Paint, Glass Beads"
+    service_life: "1-2 Years"
+  "Manhole Repair":
+    crew_size: "3-4 Workers"
+    equipment: "Jackhammer, Concrete Mixer, Masonry Tools"
+    materials: "Mortar, Concrete, Steel Rings, Bricks"
+    service_life: "10-15 Years"
+  "Milling & Overlay":
+    crew_size: "8-10 Workers"
+    equipment: "Milling Machine, Sweeper, Asphalt Paver, Rollers"
+    materials: "Hot Mix Asphalt, Tack Coat"
+    service_life: "8-12 Years"
